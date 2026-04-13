@@ -937,13 +937,22 @@
       });
       if (yearDesktop) yearDesktop.innerHTML = yearHtmlDesktop;
       if (yearMobile) yearMobile.innerHTML = yearHtmlMobile;
-
-
       // 3. 정렬 우선순위: 1. 최신 연도 먼저, 2. 숫자가 큰 번호 먼저 (폴더 생성순)
       works.sort((a, b) => {
         if (a.dirYear !== b.dirYear) return b.dirYear - a.dirYear;
         return b.id - a.id;
       });
+
+      // CDN 캐시 찌꺼기로 인한 중복 노출 방지 로직 (이름이 같은 프로젝트가 있으면 최신 것 하나만 남김)
+      const uniqueWorks = [];
+      const seenTitles = new Set();
+      for (const w of works) {
+        if (!seenTitles.has(w.title)) {
+          seenTitles.add(w.title);
+          uniqueWorks.push(w);
+        }
+      }
+      works = uniqueWorks;
 
       renderGrid();
     }
