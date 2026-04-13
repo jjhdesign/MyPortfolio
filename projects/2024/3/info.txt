@@ -1,0 +1,10 @@
+Title: PLANTHON
+Category: UI/UX
+Year: 2024
+Contribution: Research&Design 20%
+Client: 59th KOREA INTERNATIONAL DESIGN AWARD
+Color: #1a1a1a
+===
+플랜톤은 마라톤처럼 긴 여정을 위한 장기 목표 달성을 돕는 인공지능 기반 서비스로, 계획을 마라톤처럼 이루어 나간다는 의미입니다. 현대인들은 무리한 업무와 성과에 대한 압박으로 인해 "번아웃 증후군"의 위험에 노출되어 있습니다. 자신에게 맞는 페이스를 찾지 못해 억지로 목표를 수행하는 상황 때문입니다. 특히 우울이나 불안과 같은 감정 상태를 스스로 돌보지 못하는 것은 목표 수행 능력에 더욱 악영향을 미칩니다. 플랜톤은 단기적인 성과에 급급하지 않고, 장기적인 성장을 위한 지속 가능한 방법을 제시합니다. 이는 사용자가 꾸준히 동기를 유지하며, 자신이 설정한 목표를 이루는 데 큰 도움을 줍니다. 플랜톤에서는 장/단기 목표를 관리하며, 사용자의 페이스에 맞춰 계획을 제안합니다. 또한 진행 상황과 감정 상태에 따라 해결책을 제시하여 다양한 동기 부여 요소를 제공합니다. 모든 과정에서 플랜톤AI는 언제나 함께하며 누구나 쉽게 목표를 설정하고 달성하도록 돕습니다. 사용자는 마치 마라톤을 완주하듯이 긴 여정을 견뎌내고 최종적으로 목표에 도달합니다. 플랜톤과 함께라면 페이스를 잃지 않고 꾸준히 목표를 향해 나아갈 수 있습니다.
+</br>
+Planthon, an AI-based app, helps achieve long-term goals like running a marathon. Modern workers face burnout due to excessive pressure and poor work-life balance. Planthon offers sustainable strategies to maintain motivation, achieve goals, and prevent burnout through effective long-term growth methods. It manages both long-term and short-term goals, suggesting plans tailored to the user's pace and emotional state. Planthon provides various motivational elements based on progress. Always by your side, Planthon makes goal-setting and achievement easier, akin to completing a marathon. With Planthon, you can maintain your pace and steadily progress towards your goals.
