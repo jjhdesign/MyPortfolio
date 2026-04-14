@@ -911,8 +911,17 @@
       const paths = ['thumbnail.jpg', 'thumbnail.png', '1.jpg', '1.png'];
       let idx = Number(el.dataset.idx || 0) + 1;
       el.dataset.idx = idx;
+
       if (idx < paths.length) {
-        el.src = `projects/${wDirYear}/${wId}/${paths[idx]}?v=5`;
+        const nextUrl = `projects/${wDirYear}/${wId}/${paths[idx]}?v=5`;
+        fetch(nextUrl, { method: 'HEAD' }).then(res => {
+          const ct = res.headers.get('content-type') || '';
+          if (res.ok && ct.includes('image')) {
+            el.src = nextUrl;
+          } else {
+            window.fallbackMedia(el, wDirYear, wId, type, i);
+          }
+        }).catch(() => window.fallbackMedia(el, wDirYear, wId, type, i));
       } else {
         el.style.display = 'none';
       }
