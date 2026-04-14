@@ -936,7 +936,6 @@
           if (el.tagName && el.tagName.toLowerCase() === 'video') {
             const img = document.createElement('img');
             img.src = `projects/${wDirYear}/${wId}/${paths[idx]}?v=4`;
-            if (type !== 'thumb') img.loading = 'lazy';
             img.style.cssText = el.style.cssText;
             img.dataset.idx = idx;
             img.onerror = () => window.fallbackMedia(img, wDirYear, wId, type, i);
@@ -1049,10 +1048,9 @@
 
 
       const promises = [];
-      // 폴더 탐색: 2028년부터 2020년까지, 각 연도마다 1번부터 40번까지 탐색합니다.
-      const currentYear = new Date().getFullYear();
-      for (let y = currentYear + 2; y >= 2020; y--) {
-        for (let i = 1; i <= 40; i++) {
+      const yearsToCheck = [2026, 2025, 2024];
+      yearsToCheck.forEach(y => {
+        for (let i = 1; i <= 30; i++) {
           promises.push(
             fetch(`projects/${y}/${i}/info.txt`, { cache: 'no-store' })
               .then(res => {
@@ -1063,7 +1061,7 @@
               .catch(() => null)
           );
         }
-      }
+      });
 
       const results = await Promise.all(promises);
       works = results.filter(w => w !== null);
