@@ -907,50 +907,14 @@
     let activeCat = 'all', activeYear = 'all', drawerOpen = false;
 
     window.fallbackMedia = function (el, wDirYear, wId, type, i) {
-      const paths = type === 'thumb'
-        ? [`thumbnail.jpg`, `thumbnail.jpeg`, `thumbnail.png`, `thumbnail.gif`, `thumbnail.mp4`, `1.jpg`, `1.jpeg`, `1.png`, `1.gif`, `1.mp4`]
-        : [`${i}.jpg`, `${i}.jpeg`, `${i}.png`, `${i}.gif`, `${i}.mp4`];
+      if (type === 'detail') return;
+      const paths = ['thumbnail.jpg', 'thumbnail.png', '1.jpg', '1.png'];
       let idx = Number(el.dataset.idx || 0) + 1;
       el.dataset.idx = idx;
-
       if (idx < paths.length) {
-        const nextUrl = `projects/${wDirYear}/${wId}/${paths[idx]}?v=5`;
-        const ext = paths[idx].split('.').pop();
-
-        if (ext === 'mp4') {
-          fetch(nextUrl, { method: 'HEAD' }).then(res => {
-            const ct = res.headers.get('content-type') || '';
-            if (res.ok && ct.includes('video')) {
-              const vid = document.createElement('video');
-              vid.autoplay = true; vid.loop = true; vid.muted = true; vid.playsInline = true;
-              vid.style.cssText = el.style.cssText;
-              vid.src = nextUrl;
-              if (el.parentNode) el.parentNode.replaceChild(vid, el);
-            } else {
-              window.fallbackMedia(el, wDirYear, wId, type, i);
-            }
-          }).catch(() => window.fallbackMedia(el, wDirYear, wId, type, i));
-        } else {
-          fetch(nextUrl, { method: 'HEAD' }).then(res => {
-            const ct = res.headers.get('content-type') || '';
-            if (res.ok && ct.includes('image')) {
-              if (el.tagName.toLowerCase() === 'video') {
-                const img = document.createElement('img');
-                img.style.cssText = el.style.cssText;
-                img.src = nextUrl;
-                img.onerror = () => window.fallbackMedia(img, wDirYear, wId, type, i);
-                if (el.parentNode) el.parentNode.replaceChild(img, el);
-              } else {
-                el.src = nextUrl;
-              }
-            } else {
-              window.fallbackMedia(el, wDirYear, wId, type, i);
-            }
-          }).catch(() => window.fallbackMedia(el, wDirYear, wId, type, i));
-        }
+        el.src = `projects/${wDirYear}/${wId}/${paths[idx]}?v=5`;
       } else {
-        if (type === 'thumb') el.style.display = 'none';
-        else el.remove();
+        el.style.display = 'none';
       }
     };
 
