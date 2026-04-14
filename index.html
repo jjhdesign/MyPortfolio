@@ -1052,16 +1052,20 @@
 
 
       const promises = [];
-      const yearsToCheck = [2026, 2025, 2024];
-      yearsToCheck.forEach(y => {
-        for (let i = 1; i <= 30; i++) {
+      const config = [
+        { y: 2026, count: 5 },
+        { y: 2025, count: 15 },
+        { y: 2024, count: 10 }
+      ];
+      config.forEach(item => {
+        for (let i = 1; i <= item.count; i++) {
           promises.push(
-            fetch(`projects/${y}/${i}/info.txt`, { cache: 'no-store' })
+            fetch(`projects/${item.y}/${i}/info.txt`, { cache: 'no-store' })
               .then(res => {
                 if (!res.ok) throw new Error('not found');
                 return res.text();
               })
-              .then(text => parseInfoText(i, y, text))
+              .then(text => parseInfoText(i, item.y, text))
               .catch(() => null)
           );
         }
