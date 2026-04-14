@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 
 <head>
@@ -906,43 +906,47 @@
     let works = [];
     let activeCat = 'all', activeYear = 'all', drawerOpen = false;
 
-    window.fallbackMedia = function(el, wDirYear, wId, type, i) {
-      const paths = type === 'thumb' 
+    window.fallbackMedia = function (el, wDirYear, wId, type, i) {
+      const paths = type === 'thumb'
         ? [`thumbnail.jpg`, `thumbnail.jpeg`, `thumbnail.png`, `thumbnail.gif`, `thumbnail.mp4`, `1.jpg`, `1.jpeg`, `1.png`, `1.gif`, `1.mp4`]
         : [`${i}.jpg`, `${i}.jpeg`, `${i}.png`, `${i}.gif`, `${i}.mp4`];
       let idx = Number(el.dataset.idx || 0) + 1;
       el.dataset.idx = idx;
-      if (idx < paths.length) {
-        const ext = paths[idx].split('.').pop();
-        if (ext === 'mp4') {
-          const vid = document.createElement('video');
-          vid.autoplay = true; vid.loop = true; vid.muted = true; vid.playsInline = true;
-          vid.style.cssText = el.style.cssText;
-          vid.dataset.idx = idx;
-          const attemptFallback = () => window.fallbackMedia(vid, wDirYear, wId, type, i);
-          vid.onerror = attemptFallback;
-          if (el.parentNode) el.parentNode.replaceChild(vid, el);
 
-          fetch(`projects/${wDirYear}/${wId}/${paths[idx]}?v=5`, { method: 'HEAD' })
-            .then(res => {
-              const ct = res.headers.get('content-type') || '';
-              if (res.ok && !ct.includes('html')) {
-                vid.src = `projects/${wDirYear}/${wId}/${paths[idx]}?v=5`;
-              } else {
-                attemptFallback();
-              }
-            }).catch(attemptFallback);
+      if (idx < paths.length) {
+        const nextUrl = `projects/${wDirYear}/${wId}/${paths[idx]}?v=5`;
+        const ext = paths[idx].split('.').pop();
+
+        if (ext === 'mp4') {
+          fetch(nextUrl, { method: 'HEAD' }).then(res => {
+            const ct = res.headers.get('content-type') || '';
+            if (res.ok && ct.includes('video')) {
+              const vid = document.createElement('video');
+              vid.autoplay = true; vid.loop = true; vid.muted = true; vid.playsInline = true;
+              vid.style.cssText = el.style.cssText;
+              vid.src = nextUrl;
+              if (el.parentNode) el.parentNode.replaceChild(vid, el);
+            } else {
+              window.fallbackMedia(el, wDirYear, wId, type, i);
+            }
+          }).catch(() => window.fallbackMedia(el, wDirYear, wId, type, i));
         } else {
-          if (el.tagName && el.tagName.toLowerCase() === 'video') {
-            const img = document.createElement('img');
-            img.src = `projects/${wDirYear}/${wId}/${paths[idx]}?v=5`;
-            img.style.cssText = el.style.cssText;
-            img.dataset.idx = idx;
-            img.onerror = () => window.fallbackMedia(img, wDirYear, wId, type, i);
-            if (el.parentNode) el.parentNode.replaceChild(img, el);
-          } else {
-            el.src = `projects/${wDirYear}/${wId}/${paths[idx]}?v=5`;
-          }
+          fetch(nextUrl, { method: 'HEAD' }).then(res => {
+            const ct = res.headers.get('content-type') || '';
+            if (res.ok && ct.includes('image')) {
+              if (el.tagName.toLowerCase() === 'video') {
+                const img = document.createElement('img');
+                img.style.cssText = el.style.cssText;
+                img.src = nextUrl;
+                img.onerror = () => window.fallbackMedia(img, wDirYear, wId, type, i);
+                if (el.parentNode) el.parentNode.replaceChild(img, el);
+              } else {
+                el.src = nextUrl;
+              }
+            } else {
+              window.fallbackMedia(el, wDirYear, wId, type, i);
+            }
+          }).catch(() => window.fallbackMedia(el, wDirYear, wId, type, i));
         }
       } else {
         if (type === 'thumb') el.style.display = 'none';
@@ -1214,7 +1218,7 @@
 
       const imgContainer = document.getElementById('detail-images');
       let imgHtml = '';
-      for (let i = 1; i <= 200; i++) {
+      for (let i = 1; i <= 50; i++) {
         imgHtml += `<img src="projects/${w.dirYear}/${w.id}/${i}.jpg?v=5" style="width:100%; display:block;" onerror="window.fallbackMedia(this, '${w.dirYear}', '${w.id}', 'detail', ${i})">`;
       }
       imgContainer.innerHTML = imgHtml;
