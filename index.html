@@ -916,7 +916,7 @@
         const ext = paths[idx].split('.').pop();
         if (ext === 'mp4') {
           const vid = document.createElement('video');
-          vid.src = `projects/${wDirYear}/${wId}/${paths[idx]}`;
+          vid.src = `projects/${wDirYear}/${wId}/${paths[idx]}?v=3`;
           vid.autoplay = true; vid.loop = true; vid.muted = true; vid.playsInline = true;
           vid.style.cssText = el.style.cssText;
           vid.dataset.idx = idx;
@@ -925,14 +925,14 @@
         } else {
           if (el.tagName && el.tagName.toLowerCase() === 'video') {
             const img = document.createElement('img');
-            img.src = `projects/${wDirYear}/${wId}/${paths[idx]}`;
+            img.src = `projects/${wDirYear}/${wId}/${paths[idx]}?v=3`;
             if (type !== 'thumb') img.loading = 'lazy';
             img.style.cssText = el.style.cssText;
             img.dataset.idx = idx;
             img.onerror = () => window.fallbackMedia(img, wDirYear, wId, type, i);
             if (el.parentNode) el.parentNode.replaceChild(img, el);
           } else {
-            el.src = `projects/${wDirYear}/${wId}/${paths[idx]}`;
+            el.src = `projects/${wDirYear}/${wId}/${paths[idx]}?v=3`;
           }
         }
       } else {
@@ -1138,7 +1138,7 @@
         // 썸네일 처리: .jpg -> .png -> .gif 시도, 전부 없으면 화면에서 숨김
         item.innerHTML = `
       <div class="thumb-placeholder">
-        <img src="projects/${w.dirYear}/${w.id}/thumbnail.jpg" alt="${w.title}" style="width:100%; height:100%; object-fit:cover; display:block;" 
+        <img src="projects/${w.dirYear}/${w.id}/thumbnail.jpg?v=3" alt="${w.title}" style="width:100%; height:100%; object-fit:cover; display:block;" 
              onerror="window.fallbackMedia(this, '${w.dirYear}', '${w.id}', 'thumb')">
       </div>
       <div class="work-item-overlay">
@@ -1207,7 +1207,7 @@
       // 1번부터 최대 200장까지 무조건 HTML 태그를 모두 주입합니다.
       for (let i = 1; i <= 200; i++) {
         // 확장자 시도 -> 실패시 다음 포맷(mp4 포함) 탐색 -> 모두 없으면 제거
-        imgHtml += `<img src="projects/${w.dirYear}/${w.id}/${i}.jpg" loading="lazy" style="width:100%; display:block;" onerror="window.fallbackMedia(this, '${w.dirYear}', '${w.id}', 'detail', ${i})">`;
+        imgHtml += `<img src="projects/${w.dirYear}/${w.id}/${i}.jpg?v=3" loading="lazy" style="width:100%; display:block;" onerror="window.fallbackMedia(this, '${w.dirYear}', '${w.id}', 'detail', ${i})">`;
       }
       imgContainer.innerHTML = imgHtml;
 
