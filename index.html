@@ -807,13 +807,13 @@
       <div class="dropdown-wrap">
         <div class="dropdown-trigger" id="cat-trigger" onclick="toggleDropdown('cat')">
           <span class="dd-value" id="cat-label">All</span>
-          <span class="dd-arrow">↓</span>
+          <span class="dd-arrow">&darr;</span>
         </div>
       </div>
       <div class="dropdown-wrap">
         <div class="dropdown-trigger" id="year-trigger" onclick="toggleDropdown('year')">
           <span class="dd-value" id="year-label">Year</span>
-          <span class="dd-arrow">↓</span>
+          <span class="dd-arrow">&darr;</span>
         </div>
       </div>
     </div>
@@ -882,14 +882,14 @@
     </div>
     <div class="page" id="page-detail">
       <div class="detail-topbar">
-        <span class="detail-back" onclick="closeDetail()">← Back</span>
+        <span class="detail-back" onclick="closeDetail()">&larr; Back</span>
         <span class="detail-topbar-meta" id="detail-topbar-meta"></span>
       </div>
       <div class="detail-images" id="detail-images"></div>
     </div>
   </main>
 
-  <div class="scroll-top-btn" id="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+  <div class="scroll-top-btn" id="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">&uarr;</div>
 
   <div class="detail-drawer" id="detail-drawer">
     <div class="drawer-handle" onclick="toggleDrawer()">
@@ -1199,11 +1199,14 @@
 
     function showDetail(uid) {
       const w = works.find(x => x.uid === uid);
+      if (!w) return;
+
       document.getElementById('detail-topbar-meta').textContent = (w.category || '') + '  ' + (w.year || '');
-      document.getElementById('drawer-project-title').textContent = w.title;
+      document.getElementById('drawer-project-title').textContent = w.title || '';
       document.getElementById('drawer-toggle-label').textContent = 'View details';
 
-      const paras = w.desc.split('\n\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('');
+      const desc = w.desc || '';
+      const paras = desc.split('\n\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('');
       document.getElementById('drawer-desc').innerHTML = `<div class="drawer-desc">${paras}</div>`;
       document.getElementById('drawer-meta').innerHTML = `
     <div class="meta-row"><span class="meta-key">Year</span><span class="meta-val">${w.year || '-'}</span></div>
@@ -1211,13 +1214,10 @@
     <div class="meta-row"><span class="meta-key">Contribution</span><span class="meta-val">${w.contribution || '-'}</span></div>
     <div class="meta-row"><span class="meta-key">Client</span><span class="meta-val">${w.client || '-'}</span></div>`;
 
-      // 이미지 동적 로딩 (중간에 번호가 비거나 .gif가 있어도 안 끊김)
       const imgContainer = document.getElementById('detail-images');
       let imgHtml = '';
-      // 1번부터 최대 200장까지 무조건 HTML 태그를 모두 주입합니다.
       for (let i = 1; i <= 200; i++) {
-        // 확장자 시도 -> 실패시 다음 포맷(mp4 포함) 탐색 -> 모두 없으면 제거
-        imgHtml += `<img src="projects/${w.dirYear}/${w.id}/${i}.jpg?v=4" loading="lazy" style="width:100%; display:block;" onerror="window.fallbackMedia(this, '${w.dirYear}', '${w.id}', 'detail', ${i})">`;
+        imgHtml += `<img src="projects/${w.dirYear}/${w.id}/${i}.jpg?v=4" style="width:100%; display:block;" onerror="window.fallbackMedia(this, '${w.dirYear}', '${w.id}', 'detail', ${i})">`;
       }
       imgContainer.innerHTML = imgHtml;
 
@@ -1243,7 +1243,7 @@
     async function initAbout() {
       try {
         const res = await fetch(`about/about.txt`, { cache: 'no-store' });
-        if (!res.ok) return; // 파일이 없으면 기존 하드코딩된 HTML 그대로 둡니다.
+        if (!res.ok) return;
         const text = await res.text();
 
         const lines = text.split('\n');
@@ -1259,27 +1259,24 @@
             nameLine = line.substring(5).trim();
           } else if (line.startsWith('[') && line.endsWith(']')) {
             if (currentSection !== '') {
-              aboutHtml += `</div>`; // 이전 섹션 닫기
+              aboutHtml += `</div>`;
             }
             currentSection = line.substring(1, line.length - 1);
             aboutHtml += `<div class="about-section"><div class="about-section-label">${currentSection}</div>`;
           } else {
-        headerGradient.classList.remove('detail-mode');
-            if (currentSection === '') return; // 섹션 시작 전 무시
-
+            if (currentSection === '') return;
             const colonIdx = line.indexOf(':');
             if (colonIdx > -1) {
               const k = line.substring(0, colonIdx).trim();
               const v = line.substring(colonIdx + 1).trim();
               aboutHtml += `<div class="about-row"><span class="about-row-key">${k}</span><span class="about-row-val">${v}</span></div>`;
             } else {
-        headerGradient.classList.remove('detail-mode');
               aboutHtml += `<div class="about-row"><span class="about-row-val" style="grid-column:1/-1;">${line}</span></div>`;
             }
           }
         });
 
-        if (currentSection !== '') aboutHtml += `</div>`; // 마지막 섹션 닫기
+        if (currentSection !== '') aboutHtml += `</div>`;
 
         document.querySelector('.about-page').innerHTML = `
       <div class="about-name">${nameLine}</div>
