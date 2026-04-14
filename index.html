@@ -913,7 +913,7 @@
       el.dataset.idx = idx;
 
       if (idx < paths.length) {
-        const nextUrl = `projects/${wDirYear}/${wId}/${paths[idx]}?v=5`;
+        const nextUrl = `projects/${wDirYear}/${wId}/${paths[idx]}?v=6`;
         fetch(nextUrl, { method: 'HEAD' }).then(res => {
           const ct = res.headers.get('content-type') || '';
           if (res.ok && ct.includes('image')) {
@@ -1033,7 +1033,7 @@
       config.forEach(item => {
         for (let i = 1; i <= item.count; i++) {
           promises.push(
-            fetch(`projects/${item.y}/${i}/info.txt`, { cache: 'no-store' })
+            fetch(`projects/${item.y}/${i}/info.txt?v=6`, { cache: 'no-store' })
               .then(res => {
                 if (!res.ok) throw new Error('not found');
                 return res.text();
@@ -1127,7 +1127,7 @@
         // ?몃꽕??泥섎━: .jpg -> .png -> .gif ?쒕룄, ?꾨? ?놁쑝硫??붾㈃?먯꽌 ?④?
         item.innerHTML = `
       <div class="thumb-placeholder">
-        <img src="projects/${w.dirYear}/${w.id}/thumbnail.jpg?v=5" alt="${w.title}" style="width:100%; height:100%; object-fit:cover; display:block;" 
+        <img src="projects/${w.dirYear}/${w.id}/thumbnail.jpg?v=6" alt="${w.title}" style="width:100%; height:100%; object-fit:cover; display:block;" 
              onerror="window.fallbackMedia(this, '${w.dirYear}', '${w.id}', 'thumb')">
       </div>
       <div class="work-item-overlay">
@@ -1202,10 +1202,11 @@
         let found = false;
 
         for (const ext of formats) {
-          const url = `projects/${w.dirYear}/${w.id}/${i}.${ext}?v=5`;
+          const url = `projects/${w.dirYear}/${w.id}/${i}.${ext}?v=6`;
           try {
             const res = await fetch(url, { method: 'HEAD' });
-            if (res.ok && !res.headers.get('content-type').includes('html')) {
+            const ct = res.headers.get('content-type') || '';
+            if (res.ok && !ct.includes('html')) {
               if (ext === 'mp4') {
                 const vid = document.createElement('video');
                 vid.autoplay = true; vid.loop = true; vid.muted = true; vid.playsInline = true;
