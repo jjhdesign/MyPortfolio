@@ -1217,11 +1217,42 @@
     <div class="meta-row"><span class="meta-key">Client</span><span class="meta-val">${w.client || '-'}</span></div>`;
 
       const imgContainer = document.getElementById('detail-images');
-      let imgHtml = '';
-      for (let i = 1; i <= 50; i++) {
-        imgHtml += `<img src="projects/${w.dirYear}/${w.id}/${i}.jpg?v=5" style="width:100%; display:block;" onerror="window.fallbackMedia(this, '${w.dirYear}', '${w.id}', 'detail', ${i})">`;
+      imgContainer.innerHTML = ''; 
+
+      async function loadNext(i) {
+        if (i > 100) return; // 상한선
+        const formats = ['jpg', 'jpeg', 'png', 'gif', 'mp4'];
+        let found = false;
+
+        for (const ext of formats) {
+          const url = `projects/${w.dirYear}/${w.id}/${i}.${ext}?v=5`;
+          try {
+            const res = await fetch(url, { method: 'HEAD' });
+            if (res.ok && !res.headers.get('content-type').includes('html')) {
+              if (ext === 'mp4') {
+                const vid = document.createElement('video');
+                vid.autoplay = true; vid.loop = true; vid.muted = true; vid.playsInline = true;
+                vid.style.width = '100%'; vid.style.display = 'block';
+                vid.src = url;
+                imgContainer.appendChild(vid);
+              } else {
+                const img = document.createElement('img');
+                img.style.width = '100%'; img.style.display = 'block';
+                img.src = url;
+                imgContainer.appendChild(img);
+              }
+              found = true;
+              break; 
+            }
+          } catch (e) { }
+        }
+
+        if (found) {
+          loadNext(i + 1); // 다음 이미지 시도
+        }
       }
-      imgContainer.innerHTML = imgHtml;
+
+      loadNext(1);
 
       drawerOpen = false; drawer.classList.remove('open');
       showPage('detail'); window.scrollTo(0, 0);
