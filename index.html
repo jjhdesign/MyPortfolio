@@ -15,7 +15,7 @@
     :root {
       --bg: #0a0a0a;
       --fg: #fff;
-      --muted: #555;
+      --muted: #888;
       --border: #1e1e1e;
       --font: 'Pretendard', 'Helvetica Neue', Arial, sans-serif;
       --fs-ui: 15px;
@@ -118,7 +118,7 @@
     }
 
     .filter-btn:hover {
-      color: #999;
+      color: #ccc;
     }
 
     .filter-btn.active {
@@ -225,7 +225,7 @@
     }
 
     .dropdown-item:hover {
-      color: #999;
+      color: #ccc;
     }
 
     .dropdown-item.active {
@@ -381,7 +381,7 @@
       top: var(--nav-h);
       left: 0;
       right: 0;
-      z-index: 50;
+      z-index: 99;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -397,13 +397,13 @@
       letter-spacing: 0.14em;
       text-transform: uppercase;
       cursor: pointer;
-      color: var(--muted);
-      transition: color 0.2s;
+      color: #ffffff;
+      transition: opacity 0.2s;
       pointer-events: auto;
     }
 
     .detail-back:hover {
-      color: var(--fg);
+      opacity: 0.6;
     }
 
     .detail-topbar-meta {
@@ -411,7 +411,7 @@
       font-weight: 300;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: #888888;
     }
 
     .detail-images {
@@ -668,10 +668,98 @@
         padding: 56px var(--px) 80px;
       }
     }
+  
+    /* 스크롤 시 헤더 텍스트 가독성을 위한 블랙 그라디언트 배경 */
+    .header-gradient {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 180px;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.6) 45%, rgba(10,10,10,0) 100%);
+      z-index: 98;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .header-gradient.scrolled {
+      opacity: 1;
+    }
+
+    .header-gradient.detail-mode {
+      height: 120px;
+    }
+
+
+  
+    /* MOBILE BURGER & MENU OVERLAY */
+    .nav-burger {
+      display: none;
+      cursor: pointer;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px 0;
+    }
+    .nav-burger div {
+      width: 22px;
+      height: 1px;
+      background: var(--fg);
+    }
+    
+    .mobile-menu-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10, 10, 10, 0.98);
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 32px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .mobile-menu-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .mobile-menu-close {
+      position: absolute;
+      top: 24px;
+      right: var(--px);
+      font-size: var(--fs-ui);
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      color: #ccc;
+    }
+    .mobile-menu-link {
+      font-size: 20px;
+      font-weight: 300;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #888888;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .mobile-menu-link.active, .mobile-menu-link:hover {
+      color: var(--fg);
+    }
+
+    @media (max-width: 550px) {
+      .nav-links { display: none !important; }
+      .nav-burger { display: flex !important; }
+    }
+
   </style>
 </head>
 
 <body>
+
+  <div class="header-gradient" id="header-gradient"></div>
 
   <nav id="main-nav">
     <div class="nav-logo" onclick="showPage('work')">Jaehyun Jeong</div>
@@ -679,7 +767,16 @@
       <span class="nav-link active" id="nav-work" onclick="showPage('work')">Work</span>
       <span class="nav-link" id="nav-about" onclick="showPage('about')">About</span>
     </div>
+    <div class="nav-burger" onclick="document.getElementById('mobile-menu').classList.add('open')">
+      <div></div><div></div><div></div>
+    </div>
   </nav>
+
+  <div class="mobile-menu-overlay" id="mobile-menu" onclick="if(event.target === this) this.classList.remove('open')">
+    <div class="mobile-menu-close" onclick="document.getElementById('mobile-menu').classList.remove('open')">CLOSE</div>
+    <div class="mobile-menu-link active" id="m-nav-work" onclick="closeMobileMenuAndShowPage('work')">WORK</div>
+    <div class="mobile-menu-link" id="m-nav-about" onclick="closeMobileMenuAndShowPage('about')">ABOUT</div>
+  </div>
 
   <div class="filter-bar" id="filter-bar">
     <div class="filter-row">
@@ -809,6 +906,7 @@
     let activeCat = 'all', activeYear = 'all', drawerOpen = false;
 
     const mainNav = document.getElementById('main-nav');
+    const headerGradient = document.getElementById('header-gradient');
     const filterBarEl = document.getElementById('filter-bar');
     const filterBarMobile = document.getElementById('filter-bar-mobile');
     const scrollBtn = document.getElementById('scroll-top-btn');
@@ -853,6 +951,7 @@
     window.addEventListener('scroll', () => {
       const s = window.scrollY > 10;
       mainNav.classList.toggle('scrolled', s);
+      headerGradient.classList.toggle('scrolled', s);
       filterBarEl.classList.toggle('scrolled', s);
       filterBarMobile.classList.toggle('scrolled', s);
       const inDetail = document.getElementById('page-detail').classList.contains('active');
@@ -1015,23 +1114,36 @@
       });
     }
 
+    
+    function closeMobileMenuAndShowPage(page) {
+      document.getElementById('mobile-menu').classList.remove('open');
+      showPage(page);
+    }
+
     function showPage(page) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.getElementById('page-' + page).classList.add('active');
       document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
       document.getElementById(page === 'about' ? 'nav-about' : 'nav-work').classList.add('active');
+
+      document.querySelectorAll('.mobile-menu-link').forEach(l => l.classList.remove('active'));
+      document.getElementById(page === 'about' ? 'm-nav-about' : 'm-nav-work').classList.add('active');
+
       if (page === 'work') {
+        headerGradient.classList.remove('detail-mode');
         filterBarEl.style.display = ''; filterBarMobile.style.display = '';
         drawer.classList.remove('visible'); drawer.classList.remove('open');
         document.querySelector('main').style.marginTop = '';
         scrollBtn.classList.remove('visible'); window.scrollTo(0, 0);
         mainNav.classList.remove('scrolled'); filterBarEl.classList.remove('scrolled'); filterBarMobile.classList.remove('scrolled');
       } else if (page === 'detail') {
+        headerGradient.classList.add('detail-mode');
         filterBarEl.style.display = 'none'; filterBarMobile.style.display = 'none';
         drawer.classList.add('visible');
         document.querySelector('main').style.marginTop = 'var(--nav-h)';
         positionScrollBtn();
       } else {
+        headerGradient.classList.remove('detail-mode');
         filterBarEl.style.display = 'none'; filterBarMobile.style.display = 'none';
         drawer.classList.remove('visible'); drawer.classList.remove('open');
         document.querySelector('main').style.marginTop = 'var(--nav-h)';
@@ -1106,6 +1218,7 @@
             currentSection = line.substring(1, line.length - 1);
             aboutHtml += `<div class="about-section"><div class="about-section-label">${currentSection}</div>`;
           } else {
+        headerGradient.classList.remove('detail-mode');
             if (currentSection === '') return; // 섹션 시작 전 무시
 
             const colonIdx = line.indexOf(':');
@@ -1114,6 +1227,7 @@
               const v = line.substring(colonIdx + 1).trim();
               aboutHtml += `<div class="about-row"><span class="about-row-key">${k}</span><span class="about-row-val">${v}</span></div>`;
             } else {
+        headerGradient.classList.remove('detail-mode');
               aboutHtml += `<div class="about-row"><span class="about-row-val" style="grid-column:1/-1;">${line}</span></div>`;
             }
           }
