@@ -545,6 +545,19 @@
       min-height: 0;
       overflow: hidden;
     }
+    .drawer-col-desc {
+      padding: 36px var(--px) 48px var(--px);
+      overflow-y: auto;
+    }
+
+    .drawer-col-desc::-webkit-scrollbar {
+      width: 0;
+    }
+
+    .drawer-col-meta {
+      padding: 36px var(--px) 48px var(--px);
+      overflow: hidden;
+    }
 
     @media (max-width: 600px) {
       .drawer-content {
@@ -560,19 +573,6 @@
       }
     }
 
-    .drawer-col-desc {
-      padding: 36px 40px 48px var(--px);
-      overflow-y: auto;
-    }
-
-    .drawer-col-desc::-webkit-scrollbar {
-      width: 0;
-    }
-
-    .drawer-col-meta {
-      padding: 36px var(--px) 48px 40px;
-      overflow: hidden;
-    }
 
     .drawer-desc {
       font-size: var(--fs-ui);
