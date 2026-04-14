@@ -916,12 +916,22 @@
         const ext = paths[idx].split('.').pop();
         if (ext === 'mp4') {
           const vid = document.createElement('video');
-          vid.src = `projects/${wDirYear}/${wId}/${paths[idx]}?v=3`;
           vid.autoplay = true; vid.loop = true; vid.muted = true; vid.playsInline = true;
           vid.style.cssText = el.style.cssText;
           vid.dataset.idx = idx;
-          vid.onerror = () => window.fallbackMedia(vid, wDirYear, wId, type, i);
+          const attemptFallback = () => window.fallbackMedia(vid, wDirYear, wId, type, i);
+          vid.onerror = attemptFallback;
           if (el.parentNode) el.parentNode.replaceChild(vid, el);
+
+          fetch(`projects/${wDirYear}/${wId}/${paths[idx]}?v=3`, { method: 'HEAD' })
+            .then(res => {
+              const ct = res.headers.get('content-type') || '';
+              if (res.ok && !ct.includes('html')) {
+                vid.src = `projects/${wDirYear}/${wId}/${paths[idx]}?v=3`;
+              } else {
+                attemptFallback();
+              }
+            }).catch(attemptFallback);
         } else {
           if (el.tagName && el.tagName.toLowerCase() === 'video') {
             const img = document.createElement('img');
