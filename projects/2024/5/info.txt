@@ -1,7 +1,7 @@
-Title: CLASS101 UI/UX Redesign
-Category: UI/UX
+Title: eolin
+Category: MARKETING
 Year: 2024
-Contribution: Research 20% / Design 100%
+Contribution: Research&Design 25%
 Client: Personal Project
 Color: #1a1a1a
 ===

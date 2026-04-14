@@ -1,8 +1,8 @@
-Title: GYEONGCHUN-LINE FOREST PARK Brand Identity
-Category: Branding
+Title: Snip: Think in a snap
+Category: UI/UX
 Year: 2025
-Contribution: Research 30% / Design 100%
-Client: Personal Project
-Color: #161616
+Contribution: Research&Design 25%
+Client: 60th KOREA INTERNATIONAL DESIGN AWARD
+Color: #1a1a1a
 ===
-GYEONGCHUN-LINE FOREST PARK is a 5.4km linear park created through the regeneration of a former railway line. Although it has become a widely visited public space, a clear identity and consistent user experience have not yet been fully established. This project proposes a new brand identity to strengthen the park’s character and enhance the visitor experience.
+Snip is a new media literacy-based thinking platform that helps users ask, interpret, and express—starting with short-form content. For teens used to YouTube Shorts or Reels, Snip shifts the habit from passive scrolling to active thinking. Its three-step flow—Explore, Analyze, and Express—guides users from curiosity to insight and clear communication. In the “Lounge,” users exchange perspectives and reinterpret content creatively. Features like “Relay” and “Remix” enable chain-writing, adding depth and collaboration to thinking.

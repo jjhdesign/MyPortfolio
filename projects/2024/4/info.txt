@@ -1,9 +1,8 @@
-Title: eolin
-Category: MARKETING
+Title: 문장부호
+Category: EDITORIAL
 Year: 2024
-Contribution: Research&Design 25%
-Client: Personal Project
+Contribution: Design 100%
+Client: Typography Class
 Color: #1a1a1a
 ===
-An editorial design project exploring the boundaries between image and text.
-The structure of the book was reimagined to allow readers to experience content non-linearly.
+.

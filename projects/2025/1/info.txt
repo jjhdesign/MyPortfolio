@@ -1,8 +1,8 @@
-Title: relay
-Category: IDENTITY
+Title: 해결사 매-실
+Category: WEB DESIGN
 Year: 2025
-Contribution: Research&Design 25%
-Client: 2025 INNOCEAN S.O.S 공모전
-Color: #1a1a1a
+Contribution: Design 100%
+Client: Personal Project
+Color: #161616
 ===
-.
+https://jjhdesign.github.io/midterm-project-final/

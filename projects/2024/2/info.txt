@@ -1,9 +1,10 @@
-Title: Aladin Ebook UI/UX Redesign
-Category: UI/UX
+Title: Basic Typography
+Category: EDITORIAL
 Year: 2024
-Contribution: Research 33% / Design 100%
-Client: Basic UX Class
+Contribution: Design 100%
+Client: Basic Typography Class
 Color: #1a1a1a
 ===
-An editorial design project exploring the boundaries between image and text.
-The structure of the book was reimagined to allow readers to experience content non-linearly.
+Project 1- 기초 판짜기 </br>
+Project 2- 점 선 면 포스터 </br>
+Project 3- 브라움 사용 설명서 

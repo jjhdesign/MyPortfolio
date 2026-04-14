@@ -906,6 +906,41 @@
     let works = [];
     let activeCat = 'all', activeYear = 'all', drawerOpen = false;
 
+    window.fallbackMedia = function(el, wDirYear, wId, type, i) {
+      const paths = type === 'thumb' 
+        ? [`thumbnail.jpg`, `thumbnail.jpeg`, `thumbnail.png`, `thumbnail.gif`, `thumbnail.mp4`, `1.jpg`, `1.jpeg`, `1.png`, `1.gif`, `1.mp4`]
+        : [`${i}.jpg`, `${i}.jpeg`, `${i}.png`, `${i}.gif`, `${i}.mp4`];
+      let idx = Number(el.dataset.idx || 0) + 1;
+      el.dataset.idx = idx;
+      if (idx < paths.length) {
+        const ext = paths[idx].split('.').pop();
+        if (ext === 'mp4') {
+          const vid = document.createElement('video');
+          vid.src = `projects/${wDirYear}/${wId}/${paths[idx]}`;
+          vid.autoplay = true; vid.loop = true; vid.muted = true; vid.playsInline = true;
+          vid.style.cssText = el.style.cssText;
+          vid.dataset.idx = idx;
+          vid.onerror = () => window.fallbackMedia(vid, wDirYear, wId, type, i);
+          if (el.parentNode) el.parentNode.replaceChild(vid, el);
+        } else {
+          if (el.tagName && el.tagName.toLowerCase() === 'video') {
+            const img = document.createElement('img');
+            img.src = `projects/${wDirYear}/${wId}/${paths[idx]}`;
+            if (type !== 'thumb') img.loading = 'lazy';
+            img.style.cssText = el.style.cssText;
+            img.dataset.idx = idx;
+            img.onerror = () => window.fallbackMedia(img, wDirYear, wId, type, i);
+            if (el.parentNode) el.parentNode.replaceChild(img, el);
+          } else {
+            el.src = `projects/${wDirYear}/${wId}/${paths[idx]}`;
+          }
+        }
+      } else {
+        if (type === 'thumb') el.style.display = 'none';
+        else el.remove();
+      }
+    };
+
     const mainNav = document.getElementById('main-nav');
     const headerGradient = document.getElementById('header-gradient');
     const filterBarEl = document.getElementById('filter-bar');
@@ -1093,7 +1128,7 @@
       if (window.location.protocol === 'file:') return;
 
       grid.innerHTML = '';
-      const filtered = works.filter(w => (activeCat === 'all' || w.category === activeCat) && (activeYear === 'all' || w.year === activeYear));
+      const filtered = works.filter(w => (activeCat === 'all' || w.category.toUpperCase() === activeCat.toUpperCase()) && (activeYear === 'all' || w.year === activeYear));
       if (!filtered.length) { grid.innerHTML = '<div class="no-results">No projects found.</div>'; return; }
 
       filtered.forEach(w => {
@@ -1104,7 +1139,7 @@
         item.innerHTML = `
       <div class="thumb-placeholder">
         <img src="projects/${w.dirYear}/${w.id}/thumbnail.jpg" alt="${w.title}" style="width:100%; height:100%; object-fit:cover; display:block;" 
-             onerror="if(!this.dataset.j){this.dataset.j='1';this.src='projects/${w.dirYear}/${w.id}/thumbnail.jpeg';}else if(!this.dataset.p){this.dataset.p='1';this.src='projects/${w.dirYear}/${w.id}/thumbnail.png';}else if(!this.dataset.g){this.dataset.g='1';this.src='projects/${w.dirYear}/${w.id}/thumbnail.gif';}else if(!this.dataset.n1){this.dataset.n1='1';this.src='projects/${w.dirYear}/${w.id}/1.jpg';}else if(!this.dataset.n2){this.dataset.n2='1';this.src='projects/${w.dirYear}/${w.id}/1.jpeg';}else if(!this.dataset.n3){this.dataset.n3='1';this.src='projects/${w.dirYear}/${w.id}/1.png';}else if(!this.dataset.n4){this.dataset.n4='1';this.src='projects/${w.dirYear}/${w.id}/1.gif';}else{this.style.display='none';}">
+             onerror="window.fallbackMedia(this, '${w.dirYear}', '${w.id}', 'thumb')">
       </div>
       <div class="work-item-overlay">
         <div class="overlay-title">${w.title}</div>
@@ -1171,8 +1206,8 @@
       let imgHtml = '';
       // 1번부터 최대 200장까지 무조건 HTML 태그를 모두 주입합니다.
       for (let i = 1; i <= 200; i++) {
-        // .jpg 시도 -> 실패시 .png -> 실패시 .gif -> 그래도 없으면 자기 자신 삭제
-        imgHtml += `<img src="projects/${w.dirYear}/${w.id}/${i}.jpg" style="width:100%; display:block;" onerror="if(!this.dataset.j){this.dataset.j='1';this.src='projects/${w.dirYear}/${w.id}/${i}.jpeg';}else if(!this.dataset.p){this.dataset.p='1';this.src='projects/${w.dirYear}/${w.id}/${i}.png';}else if(!this.dataset.g){this.dataset.g='1';this.src='projects/${w.dirYear}/${w.id}/${i}.gif';}else{this.remove();}">`;
+        // 확장자 시도 -> 실패시 다음 포맷(mp4 포함) 탐색 -> 모두 없으면 제거
+        imgHtml += `<img src="projects/${w.dirYear}/${w.id}/${i}.jpg" loading="lazy" style="width:100%; display:block;" onerror="window.fallbackMedia(this, '${w.dirYear}', '${w.id}', 'detail', ${i})">`;
       }
       imgContainer.innerHTML = imgHtml;
 
