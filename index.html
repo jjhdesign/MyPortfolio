@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 
 <head>
@@ -141,7 +141,7 @@
       background: transparent;
     }
 
-    /* ?몃━嫄??? 2??洹몃━??*/
+    /* 트리거: 2열 그리드 */
     .filter-triggers {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -182,12 +182,12 @@
       transform: rotate(180deg);
     }
 
-    /* Year ?몃━嫄? ?쇱そ ?⑤뵫?쇰줈 遺꾨━ */
+    /* Year 트리거: 왼쪽 패딩으로 분리 */
     .dropdown-wrap:last-child .dropdown-trigger {
       padding-left: 20px;
     }
 
-    /* ?쒕∼?ㅼ슫 ?⑤꼸: filter-bar-mobile 湲곗??쇰줈 absolute, ?덈컲 ?덈퉬 */
+    /* 드롭다운 패널: filter-bar-mobile 기준으로 absolute, 너비 절반 */
     .dropdown-panel {
       display: none;
       position: absolute;
@@ -1074,7 +1074,7 @@
       const results = await Promise.all(promises);
       works = results.filter(w => w !== null);
 
-      // 2. ?숈쟻 ?곕룄 ?꾪꽣 (議댁옱?섎뒗 ?곕룄留?異붿텧)
+      // 2. 동적 연도 필터 (존재하는 연도만 추출)
       const uniqueYears = [...new Set(works.map(w => parseInt(w.year)))];
       uniqueYears.sort((a, b) => b - a); // 理쒖떊 ?곕룄媛 ?쇱そ?쇰줈 ?ㅻ룄濡??뺣젹
 
@@ -1119,7 +1119,8 @@
 
       const metaLines = metaText.split('\n');
       let title = '', category = '', contribution = '', client = '', color = '#111', award = '';
-      let year = dirYear; // ?대뜑 援ъ“?먯꽌 ?먮룞?쇰줈 ?곕룄瑜?媛€?몄샂
+      let dateDisplay = ''; // 상세 날짜 표시용
+      let year = String(dirYear); // 필터링용 연도는 폴더 이름으로 고정
 
       metaLines.forEach(line => {
         const colonIdx = line.indexOf(':');
@@ -1132,12 +1133,11 @@
           if (key === 'client' || key === 'type') client = val;
           if (key === 'color') color = val;
           if (key === 'award') award = val;
-          // txt ?덉뿉 紐낆떆??Year: 媛€ ?덈떎硫?洹멸쾬????뼱?뚯? (?꾩닔???꾨떂)
-          if ((key === 'year' || key === 'date') && val) year = val;
+          if ((key === 'year' || key === 'date') && val) dateDisplay = val;
         }
       });
 
-      return { uid: dirYear + '_' + id, id, dirYear, title: title || `Project ${id}`, category: category || 'Uncategorized', year: String(year), color, desc: descText, contribution, client, award };
+      return { uid: dirYear + '_' + id, id, dirYear, title: title || `Project ${id}`, category: category || 'Uncategorized', year: year, dateDisplay: dateDisplay || year, color, desc: descText, contribution, client, award };
     }
 
     function renderGrid() {
@@ -1152,7 +1152,7 @@
         const item = document.createElement('div');
         item.className = 'work-item'; item.style.background = w.color;
 
-        // ?몃꽕??泥섎━: .jpg -> .png -> .gif ?쒕룄, ?꾨? ?놁쑝硫??붾㈃?먯꽌 ?④?
+        // 썸네일 처리: .jpg -> .png -> .gif 시도, 전부 없으면 화면에서 숨김
         item.innerHTML = `
       <div class="thumb-placeholder">
         <img src="projects/${w.dirYear}/${w.id}/thumbnail.jpg?v=7" alt="${w.title}" style="width:100%; height:100%; object-fit:cover; display:block;" 
@@ -1208,7 +1208,7 @@
       const w = works.find(x => x.uid === uid);
       if (!w) return;
 
-      document.getElementById('detail-topbar-meta').textContent = (w.category || '') + '  ' + (w.year || '');
+      document.getElementById('detail-topbar-meta').textContent = (w.category || '') + '  ' + (w.dateDisplay || '');
       document.getElementById('drawer-project-title').textContent = w.title || '';
       document.getElementById('drawer-toggle-label').textContent = 'View details';
 
@@ -1216,7 +1216,7 @@
       const paras = desc.split('\n\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('');
       document.getElementById('drawer-desc').innerHTML = `<div class="drawer-desc">${paras}</div>`;
       document.getElementById('drawer-meta').innerHTML = `
-    <div class="meta-row"><span class="meta-key">Date</span><span class="meta-val">${w.year || '-'}</span></div>
+    <div class="meta-row"><span class="meta-key">Date</span><span class="meta-val">${w.dateDisplay || '-'}</span></div>
     <div class="meta-row"><span class="meta-key">Category</span><span class="meta-val">${w.category || '-'}</span></div>
     <div class="meta-row"><span class="meta-key">Contribution</span><span class="meta-val">${w.contribution || '-'}</span></div>
     <div class="meta-row"><span class="meta-key">Type</span><span class="meta-val">${w.client || '-'}</span></div>
