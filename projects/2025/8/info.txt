@@ -1,8 +1,8 @@
 Title: FOREST BEHIND MY SCREEN
 Category: WEB DESIGN
-Year: 2025
+Date: 2025.09 - 2025.12
 Contribution: Design 100%
-Client: Personal Project
+Type: Web Interaction Class
 Color: #161616
 ===
 https://jjhdesign.github.io/web_interaction_week7/

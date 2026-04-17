@@ -1,9 +1,8 @@
 Title: CLASS101 UI/UX Redesign
 Category: UI/UX
-Year: 2024
+Date: 2024.09 - 2024.12
 Contribution: Research 20% / Design 100%
-Client: Personal Project
+Type: UX Design Class
 Color: #1a1a1a
 ===
-An editorial design project exploring the boundaries between image and text.
-The structure of the book was reimagined to allow readers to experience content non-linearly.
+Class 101은 다양한 분야를 아우르고 있는 온라인 강의 플랫폼으로, 뛰어난 접근성 덕분에 많은 사람들에게 사랑받고 있다. 그러나, 막상 강의를 듣고자 결심해도, 수많은 방해 요인들로 인해 완강까지 달성하기 어려운 상황이 많이 발생한다. 따라서 새롭게 개선된 class 101은, 보다 많은 사람들이 강의를 끝까지 수강함에 어려움이 없도록 독려하는 서비스를 제안하고자 한다.

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 
 <head>
@@ -545,6 +545,7 @@
       min-height: 0;
       overflow: hidden;
     }
+
     .drawer-col-desc {
       padding: 36px var(--px) 48px var(--px);
       overflow-y: auto;
@@ -669,7 +670,7 @@
         padding: 56px var(--px) 80px;
       }
     }
-  
+
     /* ?ㅽ겕濡????ㅻ뜑 ?띿뒪??媛?낆꽦???꾪븳 釉붾옓 洹몃씪?붿뼵??諛곌꼍 */
     .header-gradient {
       position: fixed;
@@ -677,12 +678,13 @@
       left: 0;
       right: 0;
       height: 180px;
-      background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.6) 45%, rgba(10,10,10,0) 100%);
+      background: linear-gradient(to bottom, rgba(10, 10, 10, 0.95) 0%, rgba(10, 10, 10, 0.6) 45%, rgba(10, 10, 10, 0) 100%);
       z-index: 98;
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.4s ease;
     }
+
     .header-gradient.scrolled {
       opacity: 1;
     }
@@ -692,7 +694,7 @@
     }
 
 
-  
+
     /* MOBILE BURGER & MENU OVERLAY */
     .nav-burger {
       display: none;
@@ -701,15 +703,19 @@
       gap: 6px;
       padding: 10px 0;
     }
+
     .nav-burger div {
       width: 22px;
       height: 1px;
       background: var(--fg);
     }
-    
+
     .mobile-menu-overlay {
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       background: rgba(10, 10, 10, 0.98);
       z-index: 200;
       display: flex;
@@ -723,10 +729,12 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
     }
+
     .mobile-menu-overlay.open {
       opacity: 1;
       pointer-events: auto;
     }
+
     .mobile-menu-close {
       position: absolute;
       top: 24px;
@@ -737,6 +745,7 @@
       cursor: pointer;
       color: #ccc;
     }
+
     .mobile-menu-link {
       font-size: 20px;
       font-weight: 300;
@@ -746,15 +755,21 @@
       cursor: pointer;
       transition: color 0.2s;
     }
-    .mobile-menu-link.active, .mobile-menu-link:hover {
+
+    .mobile-menu-link.active,
+    .mobile-menu-link:hover {
       color: var(--fg);
     }
 
     @media (max-width: 550px) {
-      .nav-links { display: none !important; }
-      .nav-burger { display: flex !important; }
-    }
+      .nav-links {
+        display: none !important;
+      }
 
+      .nav-burger {
+        display: flex !important;
+      }
+    }
   </style>
 </head>
 
@@ -769,7 +784,9 @@
       <span class="nav-link" id="nav-about" onclick="showPage('about')">About</span>
     </div>
     <div class="nav-burger" onclick="document.getElementById('mobile-menu').classList.add('open')">
-      <div></div><div></div><div></div>
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
   </nav>
 
@@ -860,11 +877,13 @@
         </div>
         <div class="about-section">
           <div class="about-section-label">Experience</div>
-          <div class="about-row"><span class="about-row-key">2026.01 ??/span><span class="about-row-val">硫뗭웳?댁궗?먯쿂???붿옄?명뙆??
-              ?댁쁺吏?/span></div>
+          <div class="about-row"><span class="about-row-key">2026.01 ??/span><span
+                class="about-row-val">硫뗭웳?댁궗?먯쿂???붿옄?명뙆??
+                ?댁쁺吏?/span></div>
           <div class="about-row"><span class="about-row-key">2025.03 ??/span><span class="about-row-val">?쒕퉬???꾧났 ?숉쉶
-              MOVE</span></div>
-          <div class="about-row"><span class="about-row-key">2025.03 ??2026.12</span><span class="about-row-val">硫뗭웳?댁궗?먯쿂??
+                MOVE</span></div>
+          <div class="about-row"><span class="about-row-key">2025.03 ??2026.12</span><span
+              class="about-row-val">硫뗭웳?댁궗?먯쿂??
               湲고쉷?뚰듃</span></div>
           <div class="about-row"><span class="about-row-key">2024.08 ??2025.08</span><span class="about-row-val">GDGOC
               ?붿옄?명뙆??/span></div>
@@ -872,9 +891,9 @@
         <div class="about-section">
           <div class="about-section-label">Education</div>
           <div class="about-row"><span class="about-row-key">2024.03 ??/span><span class="about-row-val">?쒖슱怨쇳븰湲곗닠??숆탳
-              ?쒓컖?붿옄?몄쟾怨?/span></div>
+                ?쒓컖?붿옄?몄쟾怨?/span></div>
           <div class="about-row"><span class="about-row-key">2021.03 ??/span><span class="about-row-val">?쒖슱怨쇳븰湲곗닠??숆탳
-              ?꾩삁?숆낵</span></div>
+                ?꾩삁?숆낵</span></div>
           <div class="about-row"><span class="about-row-key">2018.02 ??2021.01</span><span
               class="about-row-val">?쒖슱??숆탳?щ쾾??숇??띻퀬?깊븰援?/span></div>
         </div>
@@ -905,6 +924,21 @@
   <script>
     let works = [];
     let activeCat = 'all', activeYear = 'all', drawerOpen = false;
+
+    // 인코딩(UTF-8/EUC-KR) 자동 감지 및 텍스트 로드 함수 (개선판)
+    async function smartFetchText(url) {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) throw new Error('Not found');
+      const buffer = await res.arrayBuffer();
+      try {
+        // UTF-8로 먼저 시도, 조금이라도 오류가 있으면(fatal:true) catch로 이동
+        const utf8Decoder = new TextDecoder('utf-8', { fatal: true });
+        return utf8Decoder.decode(buffer);
+      } catch (e) {
+        // UTF-8에서 오류 발생 시 EUC-KR(ANSI)로 디코딩
+        return new TextDecoder('euc-kr').decode(buffer);
+      }
+    }
 
     window.fallbackMedia = function (el, wDirYear, wId, type, i) {
       if (type === 'detail') return;
@@ -1004,12 +1038,9 @@
       // 1. 移댄뀒怨좊━ 愿由?(categories.txt ?듭떊)
       let customCategories = ['Branding', 'UI/UX', 'Marketing', 'Editorial', 'Web Design'];
       try {
-        const catRes = await fetch('categories.txt', { cache: 'no-store' });
-        if (catRes.ok) {
-          const catText = await catRes.text();
-          const parsedCats = catText.split('\n').map(c => c.trim()).filter(c => c);
-          if (parsedCats.length > 0) customCategories = parsedCats;
-        }
+        const catText = await smartFetchText('categories.txt');
+        const parsedCats = catText.split('\n').map(c => c.trim()).filter(c => c);
+        if (parsedCats.length > 0) customCategories = parsedCats;
       } catch (e) { }
 
       const catDesktop = document.querySelector('.filter-row:nth-child(1) .filter-btns');
@@ -1033,11 +1064,7 @@
       config.forEach(item => {
         for (let i = 1; i <= item.count; i++) {
           promises.push(
-            fetch(`projects/${item.y}/${i}/info.txt?v=7`, { cache: 'no-store' })
-              .then(res => {
-                if (!res.ok) throw new Error('not found');
-                return res.text();
-              })
+            smartFetchText(`projects/${item.y}/${i}/info.txt?v=7`)
               .then(text => parseInfoText(i, item.y, text))
               .catch(() => null)
           );
@@ -1091,8 +1118,8 @@
       const descText = parts[1] ? parts[1].trim() : '';
 
       const metaLines = metaText.split('\n');
-      let title = '', category = '', contribution = '', client = '', color = '#111';
-      let year = dirYear; // ?대뜑 援ъ“?먯꽌 ?먮룞?쇰줈 ?곕룄瑜?媛?몄샂
+      let title = '', category = '', contribution = '', client = '', color = '#111', award = '';
+      let year = dirYear; // ?대뜑 援ъ“?먯꽌 ?먮룞?쇰줈 ?곕룄瑜?媛€?몄샂
 
       metaLines.forEach(line => {
         const colonIdx = line.indexOf(':');
@@ -1102,14 +1129,15 @@
           if (key === 'title') title = val;
           if (key === 'category') category = val;
           if (key === 'contribution') contribution = val;
-          if (key === 'client') client = val;
+          if (key === 'client' || key === 'type') client = val;
           if (key === 'color') color = val;
-          // txt ?덉뿉 紐낆떆??Year: 媛 ?덈떎硫?洹멸쾬????뼱?뚯? (?꾩닔???꾨떂)
-          if (key === 'year' && val) year = val;
+          if (key === 'award') award = val;
+          // txt ?덉뿉 紐낆떆??Year: 媛€ ?덈떎硫?洹멸쾬????뼱?뚯? (?꾩닔???꾨떂)
+          if ((key === 'year' || key === 'date') && val) year = val;
         }
       });
 
-      return { uid: dirYear + '_' + id, id, dirYear, title: title || `Project ${id}`, category: category || 'Uncategorized', year: String(year), color, desc: descText, contribution, client };
+      return { uid: dirYear + '_' + id, id, dirYear, title: title || `Project ${id}`, category: category || 'Uncategorized', year: String(year), color, desc: descText, contribution, client, award };
     }
 
     function renderGrid() {
@@ -1139,7 +1167,7 @@
       });
     }
 
-    
+
     function closeMobileMenuAndShowPage(page) {
       document.getElementById('mobile-menu').classList.remove('open');
       showPage(page);
@@ -1188,13 +1216,14 @@
       const paras = desc.split('\n\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('');
       document.getElementById('drawer-desc').innerHTML = `<div class="drawer-desc">${paras}</div>`;
       document.getElementById('drawer-meta').innerHTML = `
-    <div class="meta-row"><span class="meta-key">Year</span><span class="meta-val">${w.year || '-'}</span></div>
+    <div class="meta-row"><span class="meta-key">Date</span><span class="meta-val">${w.year || '-'}</span></div>
     <div class="meta-row"><span class="meta-key">Category</span><span class="meta-val">${w.category || '-'}</span></div>
     <div class="meta-row"><span class="meta-key">Contribution</span><span class="meta-val">${w.contribution || '-'}</span></div>
-    <div class="meta-row"><span class="meta-key">Client</span><span class="meta-val">${w.client || '-'}</span></div>`;
+    <div class="meta-row"><span class="meta-key">Type</span><span class="meta-val">${w.client || '-'}</span></div>
+    ${w.award ? `<div class="meta-row"><span class="meta-key">Award</span><span class="meta-val">${w.award}</span></div>` : ''}`;
 
       const imgContainer = document.getElementById('detail-images');
-      imgContainer.innerHTML = ''; 
+      imgContainer.innerHTML = '';
 
       async function loadNext(i) {
         if (i > 100) return; // 상한선
@@ -1220,7 +1249,7 @@
                 imgContainer.appendChild(img);
               }
               found = true;
-              break; 
+              break;
             }
           } catch (e) { }
         }
@@ -1253,10 +1282,7 @@
 
     async function initAbout() {
       try {
-        const res = await fetch(`about/about.txt`, { cache: 'no-store' });
-        if (!res.ok) return;
-        const text = await res.text();
-
+        const text = await smartFetchText('about/about.txt');
         const lines = text.split('\n');
         let currentSection = '';
         let aboutHtml = '';

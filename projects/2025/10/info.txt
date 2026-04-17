@@ -1,8 +1,8 @@
 Title: 보이지 않는 도시들
 Category: EDITORIAL
-Year: 2025
+Date: 2025.09 - 2025.12
 Contribution: Design 100%
-Client: Personal Project
+Type: Editorial Design Class
 Color: #161616
 ===
-.
+3학년 2학기에 진행한 프로젝트입니다.

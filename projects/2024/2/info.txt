@@ -1,10 +1,10 @@
 Title: Basic Typography
 Category: EDITORIAL
-Year: 2024
+Date: 2024.03 - 2024.06
 Contribution: Design 100%
-Client: Basic Typography Class
+Type: Basic Typography Class
 Color: #1a1a1a
 ===
-Project 1- ê¸°ì´ˆ íŒì§œê¸° </br>
-Project 2- ì  ì„  ë©´ í¬ìŠ¤í„° </br>
-Project 3- ë¸Œë¼ì›€ ì‚¬ìš© ì„¤ëª…ì„œ 
+Project 1- ±âÃÊ ÆÇÂ¥±â</br>
+Project 2- Á¡¼±¸é Æ÷½ºÅÍ</br>
+Project 3- ºê¶ó¿ò »ç¿ë ¼³¸í¼­

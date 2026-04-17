@@ -1,8 +1,8 @@
 Title: 모아이
 Category: MARKETING
-Year: 2025
+Date: 2025.03 - 2025.06
 Contribution: Research&Design 25%
-Client: 2025 INNOCEAN S.O.S 공모전
+Type: CX Design Class / 2025 KOSAC 출품
 Color: #1a1a1a
 ===
-.
+AI 진입장벽을 낮출 수 있는 간편 프롬프팅 서비스 제안 프로젝트입니다.

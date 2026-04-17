@@ -1,9 +1,8 @@
-Title: Aladin Ebook UI/UX Redesign
+Title: 알라딘 전자책 리디자인
 Category: UI/UX
-Year: 2024
+Date: 2024.03 - 2024.06
 Contribution: Research 33% / Design 100%
-Client: Basic UX Class
+Type: Basic UX Class
 Color: #1a1a1a
 ===
-An editorial design project exploring the boundaries between image and text.
-The structure of the book was reimagined to allow readers to experience content non-linearly.
+2학년 1학기에 진행한 프로젝트입니다.

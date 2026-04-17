@@ -1,8 +1,8 @@
 Title: Space Odyssey
 Category: WEB DESIGN
-Year: 2025
+Date: 2025.03 - 2025.06
 Contribution: Design 100%
-Client: Personal Project
+Type: Web Publishing Class
 Color: #161616
 ===
 https://jjhdesign.github.io/final-project/

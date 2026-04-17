@@ -1,8 +1,8 @@
 Title: RANKADEMY
 Category: WEB DESIGN
-Year: 2025
+Date: 2025.07 - 2025.11
 Contribution: Design 100%
-Client: Personal Project
+Type: Team Project / Graduation Project (SEOULTECH CSE)
 Color: #161616
 ===
 https://www.rankademy.kr/

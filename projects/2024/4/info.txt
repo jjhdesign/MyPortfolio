@@ -1,8 +1,8 @@
 Title: 문장부호
 Category: EDITORIAL
-Year: 2024
+Date: 2024.09 - 2024.12
 Contribution: Design 100%
-Client: Typography Class
+Type: Typography Class
 Color: #1a1a1a
 ===
-.
+2학년 2학기에 진행한 프로젝트입니다.
