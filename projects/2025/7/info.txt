@@ -1,5 +1,5 @@
 Title: RANKADEMY
-Category: WEB DESIGN
+Category: WEB
 Date: 2025.07 - 2025.11
 Contribution: Design 100%
 Type: Team Project / Graduation Project (SEOULTECH CSE)

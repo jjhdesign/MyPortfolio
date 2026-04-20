@@ -1,5 +1,5 @@
 Title: FOREST BEHIND MY SCREEN
-Category: WEB DESIGN
+Category: WEB
 Date: 2025.09 - 2025.12
 Contribution: Design 100%
 Type: Web Interaction Class

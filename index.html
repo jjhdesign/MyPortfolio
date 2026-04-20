@@ -803,7 +803,7 @@
         <span class="filter-btn" onclick="setFilter('cat','UI/UX',this)">UI/UX</span>
         <span class="filter-btn" onclick="setFilter('cat','Marketing',this)">Marketing</span>
         <span class="filter-btn" onclick="setFilter('cat','Editorial',this)">Editorial</span>
-        <span class="filter-btn" onclick="setFilter('cat','Web Design',this)">Web Design</span>
+        <span class="filter-btn" onclick="setFilter('cat','Web',this)">Web</span>
       </div>
     </div>
     <div class="filter-row">
@@ -840,7 +840,7 @@
       <div class="dropdown-item" onclick="selectMobile('cat','UI/UX','UI/UX',this)">UI/UX</div>
       <div class="dropdown-item" onclick="selectMobile('cat','Marketing','Marketing',this)">Marketing</div>
       <div class="dropdown-item" onclick="selectMobile('cat','Editorial','Editorial',this)">Editorial</div>
-      <div class="dropdown-item" onclick="selectMobile('cat','Web Design','Web Design',this)">Web Design</div>
+      <div class="dropdown-item" onclick="selectMobile('cat','Web','Web',this)">Web</div>
     </div>
     <div class="dropdown-panel year-panel" id="year-list">
       <div class="dropdown-item active" onclick="selectMobile('year','all','Year',this)">All</div>
@@ -1035,7 +1035,7 @@
       }
 
       // 1. 移댄뀒怨좊━ 愿由?(categories.txt ?듭떊)
-      let customCategories = ['Branding', 'UI/UX', 'Marketing', 'Editorial', 'Web Design'];
+      let customCategories = ['Branding', 'UI/UX', 'Marketing', 'Editorial', 'Web'];
       try {
         const catText = await smartFetchText('categories.txt');
         const parsedCats = catText.split('\n').map(c => c.trim()).filter(c => c);
@@ -1224,8 +1224,8 @@
       const imgContainer = document.getElementById('detail-images');
       imgContainer.innerHTML = '';
 
-      async function loadNext(i) {
-        if (i > 100) return; // 상한선
+      async function loadNext(i, failCount = 0) {
+        if (i > 100 || failCount >= 5) return; // 상한선 (연속 5번 없으면 중단)
         const formats = ['jpg', 'jpeg', 'png', 'gif', 'mp4'];
         let found = false;
 
@@ -1254,7 +1254,9 @@
         }
 
         if (found) {
-          loadNext(i + 1); // 다음 이미지 시도
+          loadNext(i + 1, 0); // 찾으면 카운트 리셋
+        } else {
+          loadNext(i + 1, failCount + 1); // 못 찾으면 카운트 증가 후 다음 인덱스 시도
         }
       }
 

@@ -60,7 +60,7 @@ Color: #161616
 * 주의: 
 - 영어 철자와 콜론(:) 형식을 꼭 지켜주세요!
 - Color는 썸네일 커버 색상입니다.
-- 카테고리 (Branding, UI/UX, Marketing, Editorial, Web Design 등)는 홈페이지 필터와 연동됩니다!
+- 카테고리 (Branding, UI/UX, Marketing, Editorial, Web 등)는 홈페이지 필터와 연동됩니다!
 - info.txt에 Year: 2024 라고 억지로 적어넣으면, 폴더 연도 구조보다 그것을 우선 적용하게 됩니다.
 
 
