@@ -1231,6 +1231,18 @@
       }
     }
 
+    async function trackView(uid) {
+      const seenKey = 'viewed_' + uid;
+      const method = sessionStorage.getItem(seenKey) ? 'GET' : 'POST';
+      try {
+        const res = await fetch(`/api/views/${uid}`, { method });
+        const data = await res.json();
+        sessionStorage.setItem(seenKey, '1');
+        const el = document.getElementById('meta-views');
+        if (el) el.textContent = data.views;
+      } catch (e) { }
+    }
+
     function showDetail(uid) {
       const w = works.find(x => x.uid === uid);
       if (!w) return;
@@ -1247,7 +1259,10 @@
     <div class="meta-row"><span class="meta-key">Category</span><span class="meta-val">${w.category || '-'}</span></div>
     <div class="meta-row"><span class="meta-key">Contribution</span><span class="meta-val">${w.contribution || '-'}</span></div>
     <div class="meta-row"><span class="meta-key">Type</span><span class="meta-val">${w.client || '-'}</span></div>
-    ${w.award ? `<div class="meta-row"><span class="meta-key">Award</span><span class="meta-val">${w.award}</span></div>` : ''}`;
+    ${w.award ? `<div class="meta-row"><span class="meta-key">Award</span><span class="meta-val">${w.award}</span></div>` : ''}
+    <div class="meta-row"><span class="meta-key">Views</span><span class="meta-val" id="meta-views">-</span></div>`;
+
+      trackView(w.uid);
 
       const imgContainer = document.getElementById('detail-images');
       imgContainer.innerHTML = '';
