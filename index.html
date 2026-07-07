@@ -388,6 +388,14 @@
       text-align: center;
     }
 
+    .overlay-views {
+      font-size: 13px;
+      font-weight: 300;
+      letter-spacing: 0.03em;
+      color: rgba(255, 255, 255, 0.35);
+      text-align: center;
+    }
+
     .no-results {
       grid-column: 1/-1;
       padding: 100px var(--px);
@@ -1188,10 +1196,21 @@
       <div class="work-item-overlay">
         <div class="overlay-title">${w.title}</div>
         <div class="overlay-cat">${w.category}&nbsp;&nbsp;${w.year}</div>
+        <div class="overlay-views" id="overlay-views-${w.uid}">-</div>
       </div>`;
         item.addEventListener('click', () => showDetail(w.uid));
         grid.appendChild(item);
+        loadViewCount(w.uid);
       });
+    }
+
+    async function loadViewCount(uid) {
+      try {
+        const res = await fetch(`/api/views/${uid}`);
+        const data = await res.json();
+        const el = document.getElementById(`overlay-views-${uid}`);
+        if (el) el.textContent = `Views ${data.views}`;
+      } catch (e) { }
     }
 
 
@@ -1233,13 +1252,10 @@
 
     async function trackView(uid) {
       const seenKey = 'viewed_' + uid;
-      const method = sessionStorage.getItem(seenKey) ? 'GET' : 'POST';
+      if (sessionStorage.getItem(seenKey)) return;
       try {
-        const res = await fetch(`/api/views/${uid}`, { method });
-        const data = await res.json();
+        await fetch(`/api/views/${uid}`, { method: 'POST' });
         sessionStorage.setItem(seenKey, '1');
-        const el = document.getElementById('meta-views');
-        if (el) el.textContent = data.views;
       } catch (e) { }
     }
 
@@ -1259,8 +1275,7 @@
     <div class="meta-row"><span class="meta-key">Category</span><span class="meta-val">${w.category || '-'}</span></div>
     <div class="meta-row"><span class="meta-key">Contribution</span><span class="meta-val">${w.contribution || '-'}</span></div>
     <div class="meta-row"><span class="meta-key">Type</span><span class="meta-val">${w.client || '-'}</span></div>
-    ${w.award ? `<div class="meta-row"><span class="meta-key">Award</span><span class="meta-val">${w.award}</span></div>` : ''}
-    <div class="meta-row"><span class="meta-key">Views</span><span class="meta-val" id="meta-views">-</span></div>`;
+    ${w.award ? `<div class="meta-row"><span class="meta-key">Award</span><span class="meta-val">${w.award}</span></div>` : ''}`;
 
       trackView(w.uid);
 
