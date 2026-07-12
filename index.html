@@ -447,6 +447,13 @@
       flex-direction: column;
       gap: 0;
       background: var(--bg);
+      margin: 0 300px;
+    }
+
+    @media (max-width: 930px) {
+      .detail-images {
+        margin: 0;
+      }
     }
 
     .detail-img-item {
@@ -636,7 +643,7 @@
     }
 
     .about-page {
-      padding: 72px var(--px) 120px;
+      padding: 72px var(--px) 60px;
       max-width: 860px;
     }
 
@@ -653,12 +660,17 @@
     }
 
     .about-section-label {
+      display: inline-block;
       font-size: var(--fs-ui);
       font-weight: 300;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--muted);
       margin-bottom: 28px;
+      text-decoration: underline;
+      text-decoration-thickness: 0.5px;
+      text-underline-offset: 6px;
+      margin-right: -0.2em;
     }
 
     .about-row {
@@ -697,6 +709,58 @@
       .about-page {
         padding: 56px var(--px) 80px;
       }
+    }
+
+    .about-footer {
+      width: 100%;
+      padding: 20px var(--px);
+      background: var(--bg);
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 550px) {
+      .about-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
+
+    .footer-copy {
+      font-size: var(--fs-ui);
+      font-weight: 300;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+
+    .footer-link:hover {
+      opacity: 1;
+    }
+
+    .footer-link img {
+      width: 24px;
+      height: 24px;
     }
 
     /* ?ㅽ겕濡????ㅻ뜑 ?띿뒪??媛?낆꽦???꾪븳 釉붾옓 洹몃씪?붿뼵??諛곌꼍 */
@@ -885,6 +949,7 @@
     </div>
     <div class="page" id="page-about">
       <div class="about-page">
+        <div id="about-dynamic">
         <div class="about-name">Jaehyun<br>Jeong</div>
         <div class="about-section">
           <div class="about-section-label">Profile</div>
@@ -924,6 +989,11 @@
           <div class="about-row"><span class="about-row-key">2018.02 ??2021.01</span><span
               class="about-row-val">?쒖슱??숆탳?щ쾾??숇??띻퀬?깊븰援?/span></div>
         </div>
+        </div>
+      </div>
+      <div class="about-footer" id="about-footer">
+        <div class="footer-copy" id="footer-copy"></div>
+        <div class="footer-links" id="footer-links"></div>
       </div>
     </div>
     <div class="page" id="page-detail">
@@ -951,6 +1021,7 @@
   <script>
     let works = [];
     let activeCat = 'all', activeYear = 'all', drawerOpen = false;
+    let isPopState = false;
 
     // 인코딩(UTF-8/EUC-KR) 자동 감지 및 텍스트 로드 함수 (개선판)
     async function smartFetchText(url) {
@@ -1208,6 +1279,10 @@
       document.querySelectorAll('.mobile-menu-link').forEach(l => l.classList.remove('active'));
       document.getElementById(page === 'about' ? 'm-nav-about' : 'm-nav-work').classList.add('active');
 
+      if (!isPopState && page !== 'detail') {
+        history.pushState({ page, uid: null }, '', '#' + page);
+      }
+
       if (page === 'work') {
         headerGradient.classList.remove('detail-mode');
         filterBarEl.style.display = ''; filterBarMobile.style.display = '';
@@ -1289,6 +1364,10 @@
 
       loadNext(1);
 
+      if (!isPopState) {
+        history.pushState({ page: 'detail', uid }, '', '#detail-' + uid);
+      }
+
       drawerOpen = false; drawer.classList.remove('open');
       showPage('detail'); window.scrollTo(0, 0);
     }
@@ -1304,9 +1383,22 @@
       scrollBtn.classList.remove('visible'); showPage('work');
     }
 
+    window.addEventListener('popstate', (e) => {
+      isPopState = true;
+      const state = e.state || { page: 'work', uid: null };
+      if (state.page === 'detail' && state.uid) {
+        showDetail(state.uid);
+      } else {
+        showPage(state.page || 'work');
+      }
+      isPopState = false;
+    });
+
     // Initial Call
     initProjects();
     initAbout();
+    initFooter();
+    history.replaceState({ page: 'work', uid: null }, '', '#work');
 
     async function initAbout() {
       try {
@@ -1343,11 +1435,37 @@
 
         if (currentSection !== '') aboutHtml += `</div>`;
 
-        document.querySelector('.about-page').innerHTML = `
+        document.getElementById('about-dynamic').innerHTML = `
       <div class="about-name">${nameLine}</div>
       ${aboutHtml}
     `;
       } catch (e) { }
+    }
+
+    async function initFooter() {
+      const year = new Date().getFullYear();
+      document.getElementById('footer-copy').textContent = `© ${year} JaeHyun Jeong. All rights reserved.`;
+
+      let instagram = '', behance = '', gmail = '';
+      try {
+        const text = await smartFetchText('about/social.txt');
+        text.split('\n').forEach(line => {
+          const colonIdx = line.indexOf(':');
+          if (colonIdx === -1) return;
+          const key = line.substring(0, colonIdx).trim().toLowerCase();
+          const val = line.substring(colonIdx + 1).trim();
+          if (key === 'instagram') instagram = val;
+          if (key === 'behance') behance = val;
+          if (key === 'gmail') gmail = val;
+        });
+      } catch (e) { }
+
+      const links = document.getElementById('footer-links');
+      let html = '';
+      if (instagram) html += `<a class="footer-link" href="${instagram}" target="_blank" rel="noopener"><img src="assets/icons/instagram.svg" alt="Instagram"></a>`;
+      if (behance) html += `<a class="footer-link" href="${behance}" target="_blank" rel="noopener"><img src="assets/icons/behance.svg" alt="Behance"></a>`;
+      if (gmail) html += `<a class="footer-link" href="https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(gmail)}" target="_blank" rel="noopener"><img src="assets/icons/gmail.svg" alt="Gmail"></a>`;
+      links.innerHTML = html;
     }
   </script>
 </body>
