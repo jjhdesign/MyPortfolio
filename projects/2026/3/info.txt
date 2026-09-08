@@ -6,5 +6,5 @@ Type: Team Project
 Color: #161616
 ===
 실패가 곧장 포기로 이어지지 않도록, 동기를 부여해주는 서비스입니다. 
-App Store
+<br>App Store<br>
 https://apps.apple.com/kr/app/%EB%AA%A8%ED%8B%B0%ED%94%BC%ED%94%8C/id6767474618
