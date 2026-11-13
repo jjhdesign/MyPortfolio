@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About — Jaehyun Jeong</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="timeline.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="logo" href="index.html" aria-label="Home"><img src="logo-figma.svg" alt="JJH"></a>
+    <nav class="nav">
+      <a href="index.html">PORTFOLIO</a>
+      <a href="about.html" class="active">ABOUT</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Jaehyun Jeong</h1>
+      <div class="about-tabs" id="tabs">
+        <button class="active" data-tab="basic">기본</button>
+        <button data-tab="timeline">연표</button>
+      </div>
+    </section>
+    <section class="about" id="about"></section>
+  </main>
+
+  <footer class="site-footer">© 2026 JaeHyun Jeong. All rights reserved.</footer>
+
+  <script>
+    // Content from Figma Page 5 / Desktop-4 (mockup only).
+    const DATA = {
+      Profile: [
+        ['Name', '정재현'],
+        ['Birth', '2002.05.10'],
+        ['Phone', '010-9880-8014'],
+        ['Email', 'bogus_j@naver.com'],
+      ],
+      Education: [
+        ['2024.03 ~', '서울과학기술대학교 시각디자인전공 복수전공'],
+        ['2021.03 ~', '서울과학기술대학교 도예학과'],
+        ['2018.02 ~ 2021.01', '서울대학교사범대학부속고등학교'],
+      ],
+      Awards: [
+        ['2024.12', '2024 UGG HACKATHON 대상'],
+        ['2024.12', '2024 한국 광고학회 K-Beauty 마케팅 공모전 우수상'],
+        ['2024.08', '대한민국 디자인 전람회 디지털미디어/콘텐츠디자인 부문 입선'],
+      ],
+      Experience: [
+        ['2026.09 ~ 2026.11', '루틴 공유 서비스 Kogme UX/UI 디자이너 (App Store & Play Store 출시)'],
+        ['2026.05', '헬로월드랩스 플레이그라운드 주관 AI 실무 교육 수료'],
+        ['2026.01 ~ 2026.09', '헬스케어 서비스 motipeople UX/UI 디자이너 (App Store 출시)'],
+        ['2026.01 ~', '멋쟁이사자처럼 대학 14기 디자인파트 운영진'],
+        ['2025.07 ~ 2025.11', '서울과학기술대학교 컴퓨터공학과 졸업작품 RANKADEMY UX/UI 디자이너'],
+        ['2025.03 ~ 2026.09', '서울과학기술대학교 시각디자인전공 서비스 전공 학회 MOVE'],
+        ['2025.03 ~ 2025.12', '멋쟁이사자처럼 대학 13기 기획파트'],
+        ['2024.08 ~ 2025.08', 'GDG ON CAMPUS UX/UI 디자인파트'],
+      ],
+      // 연표 탭에만 표시 (기본 탭 제외)
+      Military: [
+        ['2022.04 ~ 2023.10', '육군 병장 만기전역'],
+      ],
+    };
+
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const row = (k, v, tag) => `<div class="row"><span class="k">${esc(k)}</span><span class="v">${esc(v)}</span>${tag ? `<span class="tag">${esc(tag)}</span>` : ''}</div>`;
+    const section = (title, rows, cls = '') => `<div class="section ${cls}"><h3>${title}</h3><div class="rows">${rows}</div></div>`;
+
+    function basic() {
+      return ['Profile', 'Education', 'Awards', 'Experience'].map(t => [t, DATA[t]]).map(([t, rows]) => section(t, rows.map(([k, v]) => row(k, v)).join(''))).join('');
+    }
+
+    // ---------- 연표: horizontal timeline (shared engine in timeline.js) ----------
+    function timeline() {
+      const items = ['Education', 'Military', 'Experience', 'Awards']
+        .flatMap(t => DATA[t].map(([k, v]) => {
+          const r = Timeline.parseRange(k);
+          const meta = t === 'Awards' ? 'Awards' : `${t} · ${r.open ? '진행 중' : (r.end - r.start) + '개월'}`;
+          return {
+            ...r, range: k, cls: `t-${t.toLowerCase()}`, tip: `${esc(v)}&#10;${esc(k)}`,
+            html: `<span class="t">${esc(v)}</span><span class="m">${esc(meta)}</span>`,
+          };
+        }));
+      // desktop: vertical timetable / mobile: horizontal, swipe sideways
+      return `<div class="section timeline">${mq.matches ? Timeline.renderH(items) : Timeline.renderV(items)}</div>`;
+    }
+
+    const mq = matchMedia('(max-width: 700px)');
+    const about = document.getElementById('about');
+    let tab = 'basic';
+    const render = () => {
+      about.innerHTML = tab === 'timeline' ? timeline() : basic();
+      Timeline.enableDrag(about.querySelector('.tlh-scroll'));
+    };
+    document.getElementById('tabs').addEventListener('click', e => {
+      const b = e.target.closest('button[data-tab]');
+      if (!b) return;
+      document.querySelectorAll('#tabs button').forEach(x => x.classList.toggle('active', x === b));
+      tab = b.dataset.tab; render();
+    });
+    mq.addEventListener('change', () => { if (tab === 'timeline') render(); });
+
+    render();
+  </script>
+</body>
+</html>

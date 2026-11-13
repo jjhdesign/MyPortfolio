@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Portfolio — Jaehyun Jeong</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="projects.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="logo" href="index.html" aria-label="Home"><img src="logo-figma.svg" alt="JJH"></a>
+    <nav class="nav">
+      <a href="index.html" class="active">PORTFOLIO</a>
+      <a href="about.html">ABOUT</a>
+    </nav>
+  </header>
+
+  <main id="view-list">
+    <section class="hero">
+      <h1>PORTFOLIO</h1>
+      <div class="filter-row" id="cat-filter"></div>
+      <div class="filter-row" id="year-filter"></div>
+    </section>
+    <section class="grid" id="grid"></section>
+  </main>
+
+  <main id="view-detail" hidden></main>
+
+  <footer class="site-footer">© 2026 JaeHyun Jeong. All rights reserved.</footer>
+
+  <script>
+    // Redesign mockup: project data via projects.js (reads ../projects, read-only).
+    const { ROOT, CATS, THUMBS } = Projects;
+    const MEDIA_EXT = ['jpg', 'jpeg', 'png', 'gif', 'mp4'];
+
+    const state = { cat: 'ALL', year: 'ALL' };
+    let works = [];
+
+    const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+    async function loadWorks() { works = await Projects.load(); }
+
+    // ---------- List ----------
+    function renderFilters() {
+      const years = [...new Set(works.map(w => w.year))];
+      const btn = (key, v) => `<button class="${state[key] === String(v) ? 'active' : ''}" data-k="${key}" data-v="${v}">${v}</button>`;
+      document.getElementById('cat-filter').innerHTML = ['ALL', ...CATS].map(v => btn('cat', v)).join('');
+      document.getElementById('year-filter').innerHTML = ['ALL', ...years].map(v => btn('year', v)).join('');
+    }
+
+    function thumbImg(w) {
+      return `<img alt="" loading="lazy" data-i="0" src="${ROOT}/${w.year}/${w.id}/${THUMBS[0]}"
+        onload="this.classList.add('loaded')" onerror="nextThumb(this, ${w.year}, ${w.id})">`;
+    }
+    window.nextThumb = (el, y, id) => {
+      const i = +el.dataset.i + 1;
+      if (i >= THUMBS.length) { el.remove(); return; }
+      el.dataset.i = i;
+      el.src = `${ROOT}/${y}/${id}/${THUMBS[i]}`;
+    };
+
+    function renderGrid() {
+      const grid = document.getElementById('grid');
+      let html = '';
+      const years = [...new Set(works.map(w => w.year))].filter(y => state.year === 'ALL' || String(y) === state.year);
+      for (const y of years) {
+        const all = works.filter(w => w.year === y);
+        const list = all.filter(w => state.cat === 'ALL' || w.cat === state.cat);
+        if (!list.length) continue;
+        const counts = CATS.map(c => [c, all.filter(w => w.cat === c).length]).filter(([, n]) => n);
+        html += `<div class="cell year-cell">
+          <p class="year">${y}</p>
+          <ul>${counts.map(([c, n]) => `<li class="${state.cat !== 'ALL' && state.cat !== c ? 'dim' : ''}"><span>${c}</span><span>${n}</span></li>`).join('')}</ul>
+        </div>`;
+        html += list.map(w => `<a class="cell card" href="#/${w.year}/${w.id}" style="${w.meta.color ? `background:${esc(w.meta.color)}` : ''}">
+          ${thumbImg(w)}
+          <span class="caption"><span class="t">${esc(w.title)}</span><span class="c">${esc(w.cat)}</span></span>
+        </a>`).join('');
+      }
+      grid.innerHTML = html || '<p class="empty">No projects.</p>';
+    }
+
+    document.getElementById('view-list').addEventListener('click', e => {
+      const b = e.target.closest('button[data-k]');
+      if (!b) return;
+      state[b.dataset.k] = b.dataset.v;
+      renderFilters(); renderGrid();
+    });
+
+    // ---------- Detail ----------
+    async function probe(url) {
+      try { const r = await fetch(url, { method: 'HEAD' }); return r.ok; } catch { return false; }
+    }
+
+    async function renderDetail(y, id) {
+      const w = works.find(w => w.year === y && w.id === id);
+      const view = document.getElementById('view-detail');
+      if (!w) { location.hash = ''; return; }
+      const m = w.meta;
+      const rows = [['Date', m.date || m.year], ['Category', w.cat], ['Contribution', m.contribution], ['Type', m.type], ['Award', m.award]]
+        .filter(([, v]) => v);
+      view.innerHTML = `<section class="detail">
+        <aside class="detail-info">
+          <a class="back" href="#">← PORTFOLIO</a>
+          <h2>${esc(w.title)}</h2>
+          <dl class="meta">${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
+          <div class="desc">${w.desc.map(p => `<p>${esc(p).replace(/\n/g, '<br>')}</p>`).join('')}</div>
+        </aside>
+        <div class="detail-media" id="media"></div>
+      </section>`;
+      window.scrollTo(0, 0);
+
+      const media = document.getElementById('media');
+      const token = (renderDetail.token = {});
+      let miss = 0;
+      for (let i = 1; miss < 3; i++) {
+        let found = null;
+        for (const ext of MEDIA_EXT) {
+          const url = `${ROOT}/${y}/${id}/${i}.${ext}`;
+          if (await probe(url)) { found = { url, ext }; break; }
+        }
+        if (token !== renderDetail.token) return; // navigated away
+        if (!found) { miss++; continue; }
+        miss = 0;
+        media.insertAdjacentHTML('beforeend', found.ext === 'mp4'
+          ? `<video src="${found.url}" autoplay muted loop playsinline></video>`
+          : `<img src="${found.url}" alt="">`);
+      }
+    }
+
+    // ---------- Router ----------
+    function route() {
+      const m = location.hash.match(/^#\/(\d{4})\/(\d+)/);
+      const list = document.getElementById('view-list');
+      const detail = document.getElementById('view-detail');
+      if (m) {
+        list.hidden = true; detail.hidden = false;
+        renderDetail(+m[1], +m[2]);
+      } else {
+        renderDetail.token = {};
+        detail.hidden = true; list.hidden = false;
+      }
+    }
+    window.addEventListener('hashchange', route);
+
+    loadWorks().then(() => { renderFilters(); renderGrid(); route(); });
+  </script>
+</body>
+</html>
